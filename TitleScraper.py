@@ -20,7 +20,7 @@ for submission in subreddit.top('all'):
     if len(submissions) >= 25:
         break
 
-s = '\n'
+s = '\n\n'
 formatted_submissions = s.join(submissions)#.encode('utf-8').strip()
 
 print(formatted_submissions)
