@@ -1,3 +1,3 @@
-# RedditDigest
+# RedditEmailAutomation
 
-Once a week, email the titles of the top 10 new songs from r/EDM
+A collection of python scripts that email information from Reddit
