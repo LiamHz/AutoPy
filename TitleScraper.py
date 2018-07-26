@@ -1,4 +1,4 @@
-# Email the titles of the top X posts from a specified subreddit
+# Email the titles of the top 25 posts from a specified subreddit
 
 import praw
 
@@ -17,7 +17,7 @@ subreddit = reddit.subreddit('OneGoodSentence')
 
 for submission in subreddit.top('all'):
     submissions.append(submission.title)
-    if len(submissions) >= 19:
+    if len(submissions) >= 25:
         break
 
 s = '\n'

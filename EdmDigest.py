@@ -1,3 +1,5 @@
+# Email the titles of the top 10 new songs from r/EDM
+
 import praw
 
 import smtplib
@@ -5,7 +7,6 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 # Print the top 10 new songs of the week in the EDM subreddit
-match = 0
 submissions = []
 reddit = praw.Reddit(client_id='UFc9vhBQpf3ZgA',
                      client_secret='mHkj6yxCi-JMFQUjC8fS748Jdt4',
@@ -19,8 +20,7 @@ for submission in subreddit.search('flair:New', sort='top', time_filter='week'):
     # Only print submissions that are for songs
     print(submission.title)
     submissions.append(submission.title)
-    match += 1
-    if match >= 10:
+    if len(submissions) >= 10:
         break
 
 s = '\n'
