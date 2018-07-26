@@ -24,8 +24,7 @@ for submission in subreddit.search('flair:New', sort='top', time_filter='week'):
         break
 
 s = '\n'
-formatted_submissions = s.join(submissions).encode('utf-8').strip()
-print(formatted_submissions)
+formatted_submissions = s.join(submissions)
 
 # Email results to self
 fromaddr = "liam.hinzman@gmail.com"
@@ -35,11 +34,13 @@ msg['From'] = fromaddr
 msg['To'] = toaddr
 msg['Subject'] = "Reddit Digest: New EDM Tracks"
 
-text = formatted_submissions
+# Allow Unicode characters to be emailed
+text = MIMEText(formatted_submissions.encode('utf-8'), 'plain', 'UTF-8')
+
+msg.attach(text)
 
 server = smtplib.SMTP('smtp.gmail.com', 587)
 server.starttls()
 server.login(fromaddr, "Atwummt3Tihhb1Bdnf4Swb1Icnfty5")
-# text = body.as_string
-server.sendmail(fromaddr, toaddr, text)
+server.sendmail(fromaddr, toaddr, msg.as_string())
 server.quit()
