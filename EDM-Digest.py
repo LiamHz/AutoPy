@@ -32,7 +32,7 @@ toaddr = "liam.hinzman@gmail.com"
 msg = MIMEMultipart()
 msg['From'] = fromaddr
 msg['To'] = toaddr
-msg['Subject'] = "Reddit Digest: New EDM Tracks"
+msg['Subject'] = "EDM Digest"
 
 # Allow Unicode characters to be emailed
 text = MIMEText(formatted_submissions.encode('utf-8'), 'plain', 'UTF-8')
