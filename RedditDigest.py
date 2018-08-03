@@ -17,7 +17,7 @@ reddit = praw.Reddit(client_id='UFc9vhBQpf3ZgA',
 subredditLimit = 2
 
 # Selected subreddits
-subreddits = ['Toronto', 'News', 'WorldNews', 'Technology', 'Science', 'TodayILearned', 'Philosophy']
+subreddits = ['Toronto', 'News', 'WorldNews', 'Technology', 'Science', 'TodayILearned', 'Philosophy', 'Videos', 'WritingPrompts', 'Pics', 'MostBeautiful', 'EarthPorn']
 # Include link to post
 # 'Videos', 'WritingPrompts', 'Pics', 'MostBeautiful', 'EarthPorn', 'InterestingAsFuck' (Filter for only photos)
 
@@ -27,9 +27,10 @@ for SR in subreddits:
     subreddit = reddit.subreddit(SR)
     submissions.append(("<h2>{}</h2>").format(SR))
     for submission in subreddit.top(time_filter='day', limit=subredditLimit):
-        # Only print submissions that are for songs
-        print(submission.title)
+        submissions.append(("<a href='{}'>").format(submission.url))
         submissions.append(("<p>{}</p>").format(submission.title))
+        submissions.append("</a>")
+    submissions.append("<br>")
 
 # Email results to self
 fromaddr = "liam.hinzman@gmail.com"
