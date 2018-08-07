@@ -6,18 +6,29 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+# Read user credentials from external file
+f = open("AuthenticationCredentials.txt","r")
+lines = f.read().splitlines()
+EMAIL_USERNAME = lines[1]
+EMAIL_PASSWORD = lines[2]
+REDDIT_USERNAME = lines[5]
+REDDIT_PASSWORD = lines[6]
+API_USERNAME = lines[9]
+API_PASSWORD = lines[10]
+f.close()
+
 submissions = []
-reddit = praw.Reddit(client_id='UFc9vhBQpf3ZgA',
-                     client_secret='mHkj6yxCi-JMFQUjC8fS748Jdt4',
-                     password="G8t0inSwe0RZcr7k",
-                     username='Wallfacer42',
+reddit = praw.Reddit(client_id=API_USERNAME,
+                     client_secret=API_PASSWORD,
+                     password=REDDIT_PASSWORD,
+                     username=REDDIT_USERNAME,
                      user_agent='RedditDigest')
 
 # How many posts to send from each subreddit
 subredditLimit = 2
 
 # Selected subreddits
-subreddits = ['Toronto', 'News', 'WorldNews', 'Technology', 'Science', 'TodayILearned', 'Philosophy', 'Videos', 'WritingPrompts', 'Pics', 'MostBeautiful', 'EarthPorn']
+subreddits = ['Toronto', 'News', 'WorldNews', 'Technology', 'Science', 'TodayILearned', 'Philosophy', 'Videos', 'Pics', 'MostBeautiful', 'EarthPorn']
 # Include link to post
 # 'Videos', 'WritingPrompts', 'Pics', 'MostBeautiful', 'EarthPorn', 'InterestingAsFuck' (Filter for only photos)
 
@@ -33,8 +44,8 @@ for SR in subreddits:
     submissions.append("<br>")
 
 # Email results to self
-fromaddr = "liam.hinzman@gmail.com"
-toaddr = "liam.hinzman@gmail.com"
+fromaddr = EMAIL_USERNAME
+toaddr = EMAIL_USERNAME
 
 # Create message container
 msg = MIMEMultipart('alternative')
@@ -65,6 +76,6 @@ msg.attach(html)
 
 server = smtplib.SMTP('smtp.gmail.com', 587)
 server.starttls()
-server.login(fromaddr, "Atwummt3Tihhb1Bdnf4Swb1Icnfty5")
+server.login(fromaddr, EMAIL_PASSWORD)
 server.sendmail(fromaddr, toaddr, msg.as_string())
 server.quit()
