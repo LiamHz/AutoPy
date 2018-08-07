@@ -5,9 +5,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+# User Credentials
+USERNAME = "liam-hinzman"
+PASSWORD = "Shusaku123!"
+
 desiredSheets = input("What piece do you wish to download? \n")
 searchSite = "musescore.com"
-firstGoogleResult = '(//h3)[1]/a' #All search results are held in H3s
 
 # Set download location NOT WORKING
 options = webdriver.ChromeOptions()
@@ -18,22 +21,29 @@ driver.get(("https://www.google.ca/search?&q=site%3A{}+{}").format(searchSite, d
 
 # Wait until google results load
 elem = WebDriverWait(driver, 10).until(
-    EC.presence_of_element_located((By.XPATH, firstGoogleResult))
+    EC.presence_of_element_located((By.XPATH, '(//h3)[1]/a'))
 )
 
-# Go to the first result's log in redirect
+# Iterate through results until a musescore link is found (prevents going to google image and video results)
 redirect = 'user/login?destination=/'
-elem = driver.find_element_by_xpath(firstGoogleResult)
-link = elem.get_attribute('href')
+isMusescoreLink = False
+i = 1
+while not isMusescoreLink:
+    elem = driver.find_element_by_xpath(("(//h3)[{}]/a").format(i))
+    link = elem.get_attribute('href')
+    if 'https://musescore.com' in link:
+        isMusescoreLink = True
+    i += 1
+
+# Go to the login redirect for that Musescore result
 link = link[:22] + redirect + link[22:]
 driver.get(("{}".format(link)))
-print(link)
 
 # Signin to Musescore
 elem = driver.find_element_by_id('edit-name')
-elem.send_keys('liam-hinzman')
+elem.send_keys(USERNAME)
 elem = driver.find_element_by_id('edit-pass')
-elem.send_keys('Shusaku123!')
+elem.send_keys(PASSWORD)
 elem.send_keys(Keys.TAB)
 elem.send_keys(Keys.TAB)
 elem.send_keys(Keys.RETURN)
