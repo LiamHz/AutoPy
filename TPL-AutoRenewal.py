@@ -13,6 +13,7 @@ PASSWORD = lines[18]
 
 driver = webdriver.Chrome()
 driver.get("https://account.torontopubliclibrary.ca/checkouts")
+
 # Login to TPL
 elem = driver.find_element_by_id('userID')
 elem.clear()
@@ -20,6 +21,7 @@ elem.send_keys(USERNAME)
 elem = driver.find_element_by_id('password')
 elem.send_keys(PASSWORD)
 elem.send_keys(Keys.RETURN)
+
 # Wait until checkouts page loads
 xxx = "//table[@class='item-list']/tbody[1]/tr[@class='item-row']/td[@class='hidden-mobile']/div[@class='item-due']"
 elem = WebDriverWait(driver, 10).until(
