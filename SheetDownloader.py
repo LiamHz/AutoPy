@@ -5,9 +5,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-# User Credentials
-USERNAME = "liam-hinzman"
-PASSWORD = "Shusaku123!"
+# Read user credentials from external file
+f = open("AuthenticationCredentials.txt","r")
+lines = f.read().splitlines()
+USERNAME = lines[13]
+PASSWORD = lines[14]
+f.close()
 
 desiredSheets = input("What piece do you wish to download? \n")
 searchSite = "musescore.com"
