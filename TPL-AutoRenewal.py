@@ -22,10 +22,25 @@ elem = driver.find_element_by_id('password')
 elem.send_keys(PASSWORD)
 elem.send_keys(Keys.RETURN)
 
-# Wait until checkouts page loads
-xxx = "//table[@class='item-list']/tbody[1]/tr[@class='item-row']/td[@class='hidden-mobile']/div[@class='item-due']"
-elem = WebDriverWait(driver, 10).until(
-    EC.presence_of_element_located((By.XPATH, xxx))
-)
-elem = driver.find_element_by_xpath(xxx)
-print(elem.text)
+renewing = True
+itemIndex = 1
+
+while renewing:
+    # Wait until checkouts page loads
+    itemDueDateXPath = "//table[@class='item-list']/tbody[{}]/tr[@class='item-row']/td[@class='hidden-mobile']/div[@class='item-due']".format(itemIndex)
+    renewButtonXPath = "//table[@class='item-list']/tbody[{}]/tr[@class='item-row']/td[@class='item-actions']/button".format(itemIndex)
+
+    elem = WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, itemDueDateXPath))
+    )
+    elem = driver.find_element_by_xpath(itemDueDateXPath)
+    print(elem.text)
+
+    # If checkout is due tomorrow renew hold
+    if 'tomorrow' in elem.text or 'today' in elem.text:
+        elem = driver.find_element_by_xpath(renewButtonXPath)
+        print(elem.text)
+        elem.click()
+        itemIndex += 1
+    else:
+        renewing = False
