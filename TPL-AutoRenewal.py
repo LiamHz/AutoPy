@@ -26,20 +26,18 @@ renewing = True
 itemIndex = 1
 
 while renewing:
-    # Wait until checkouts page loads
     itemDueDateXPath = "//table[@class='item-list']/tbody[{}]/tr[@class='item-row']/td[@class='hidden-mobile']/div[@class='item-due']".format(itemIndex)
     renewButtonXPath = "//table[@class='item-list']/tbody[{}]/tr[@class='item-row']/td[@class='item-actions']/button".format(itemIndex)
 
+    # Wait until checkouts page loads
     elem = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.XPATH, itemDueDateXPath))
     )
     elem = driver.find_element_by_xpath(itemDueDateXPath)
-    print(elem.text)
 
-    # If checkout is due tomorrow renew hold
+    # If checkout is due today or tomorrow renew hold
     if 'tomorrow' in elem.text or 'today' in elem.text:
         elem = driver.find_element_by_xpath(renewButtonXPath)
-        print(elem.text)
         elem.click()
         itemIndex += 1
     else:
