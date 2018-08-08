@@ -3,7 +3,7 @@
 A collection of python scripts that automate various tasks
 
 ### TPL-AutoRenewal
-Renews checkouts due today from the TPL
+Renews checkouts due today or tomorrow from the Toronto Public Library
 
 ### SheetDownloader
 Download piano sheets from the first Musescore result
