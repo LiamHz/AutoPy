@@ -1,3 +1,6 @@
+# Renew checkouts from the Toronto Public Library that are due today, tomorrow, or overdue
+# If an item could not be renewed, notify the user via email 
+
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
@@ -55,6 +58,7 @@ f.close()
 # The current user being serviced
 userIndex = 0
 
+# Renew checkouts that are due today, tomorrow or overdue
 while userIndex < numUsers:
     driver = webdriver.Chrome()
     driver.get("https://account.torontopubliclibrary.ca/checkouts")
@@ -114,8 +118,8 @@ while userIndex < numUsers:
     itemsFailedRenewed = []
     itemIndex = 1
 
+    # If any items failed to renew, add them to itemsFailedRenewed list
     while itemIndex <= len(itemsRenewed):
-        # Check if any checkouts failed to renew
         for title, status in itemsRenewed.items():
             itemTitleXPath = "//table[@class='item-list']/tbody[{}]//div[@class='item-title']".format(itemIndex)
             itemDueDateXPath = "//table[@class='item-list']/tbody[{}]//div[@class='item-due']".format(itemIndex)
