@@ -68,11 +68,12 @@ while userIndex < numUsers:
     elem.send_keys(Keys.RETURN)
 
     renewing = True
-    itemsRenewed = []
+    itemsRenewed = {}
     itemIndex = 1
 
     while renewing:
         itemTitleXPath = "//table[@class='item-list']/tbody[{}]//div[@class='item-title']".format(itemIndex)
+        itemDueDateXPath = "//table[@class='item-list']/tbody[{}]//div[@class='item-due']".format(itemIndex)
         itemStatusXPath = "//table[@class='item-list']/tbody[{}]//div[@class='item-status']".format(itemIndex)
         renewButtonXPath = "//table[@class='item-list']/tbody[{}]//button".format(itemIndex)
 
@@ -93,9 +94,11 @@ while userIndex < numUsers:
         # If checkout is due today or tomorrow renew hold
         if 'tomorrow' in elemtext or 'today' in elemtext or 'overdue' in elemtext:
 
-            # Add matching item to list showing renewal has been attempted
-            elem = driver.find_element_by_xpath(itemTitleXPath)
-            itemsRenewed.append(elem.text)
+            # Add matching item to dict showing renewal has been attempted
+            # {k: v} = {Title: Status}
+            elemTitle = driver.find_element_by_xpath(itemTitleXPath).text
+            elemDueDate = driver.find_element_by_xpath(itemDueDateXPath).text
+            itemsRenewed[elemTitle] = elemDueDate
 
             # Test if renew button is available
             try:
@@ -109,11 +112,23 @@ while userIndex < numUsers:
             renewing = False
 
     itemsFailedRenewed = []
+    itemIndex = 1
 
-    # Check if any checkouts failed to renew
-    for title in itemsRenewed:
-        if title in driver.page_source:
-            itemsFailedRenewed.append(title)
+    while itemIndex <= len(itemsRenewed):
+        # Check if any checkouts failed to renew
+        for title, status in itemsRenewed.items():
+            itemTitleXPath = "//table[@class='item-list']/tbody[{}]//div[@class='item-title']".format(itemIndex)
+            itemDueDateXPath = "//table[@class='item-list']/tbody[{}]//div[@class='item-due']".format(itemIndex)
+
+            elemTitle = driver.find_element_by_xpath(itemTitleXPath).text
+            elemDueDate = driver.find_element_by_xpath(itemDueDateXPath).text
+
+            # If a item's due date is the same as it was before
+            # The item failed to renew
+            if title in elemTitle and itemsRenewed[title] in elemDueDate:
+                itemsFailedRenewed.append(title)
+
+        itemIndex += 1
 
     # If any results failed to renew email them to user
     if len(itemsFailedRenewed) >= 1:
