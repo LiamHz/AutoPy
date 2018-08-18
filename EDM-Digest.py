@@ -37,21 +37,50 @@ for submission in subreddit.search('flair:New', sort='top', time_filter='week'):
 s = '\n'
 formatted_submissions = s.join(submissions)
 
-# Email results to self
-fromaddr = EMAIL_USERNAME
-toaddr = EMAIL_USERNAME
-msg = MIMEMultipart()
-msg['From'] = fromaddr
-msg['To'] = toaddr
-msg['Subject'] = "EDM Digest"
+# Read mailing list
+searching = True
+numUsers = 0
+EMAIL_MAILING_LIST = []
 
-# Allow Unicode characters to be emailed
-text = MIMEText(formatted_submissions.encode('utf-8'), 'plain', 'UTF-8')
+f = open("EDM-DigestMailingList.txt", 'r')
+lines = f.read().splitlines()
 
-msg.attach(text)
+# Add users to mailing list
+while searching:
+    try:
+        if lines[0 + numUsers] == "":
+            searching = False
+        else:
+            EMAIL_MAILING_LIST.append(lines[0 + numUsers])
+            numUsers += 1
+    # If there are no more lines in the mailing list file
+    # Then there are no more user to mail to
+    except IndexError:
+        searching = False
 
-server = smtplib.SMTP('smtp.gmail.com', 587)
-server.starttls()
-server.login(fromaddr, EMAIL_PASSWORD)
-server.sendmail(fromaddr, toaddr, msg.as_string())
-server.quit()
+f.close()
+
+# The current user being serviced
+userIndex = 0
+
+while userIndex < len(EMAIL_MAILING_LIST):
+    # Email results to self
+    fromaddr = EMAIL_USERNAME
+    toaddr = EMAIL_MAILING_LIST[userIndex]
+    msg = MIMEMultipart()
+    msg['From'] = fromaddr
+    msg['To'] = toaddr
+    msg['Subject'] = "EDM Digest"
+
+    # Allow Unicode characters to be emailed
+    text = MIMEText(formatted_submissions.encode('utf-8'), 'plain', 'UTF-8')
+
+    msg.attach(text)
+
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login(fromaddr, EMAIL_PASSWORD)
+    server.sendmail(fromaddr, toaddr, msg.as_string())
+    server.quit()
+
+    userIndex += 1
