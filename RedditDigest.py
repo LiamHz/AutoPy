@@ -28,9 +28,8 @@ reddit = praw.Reddit(client_id=API_USERNAME,
 subredditLimit = 2
 
 # Selected subreddits
-subreddits = ['Toronto', 'News', 'WorldNews', 'Technology', 'Science', 'TodayILearned', 'Philosophy', 'Videos', 'Pics', 'MostBeautiful', 'EarthPorn']
-# Include link to post
-# 'Videos', 'WritingPrompts', 'Pics', 'MostBeautiful', 'EarthPorn', 'InterestingAsFuck' (Filter for only photos)
+subreddits = ['Toronto', 'News', 'WorldNews', 'Technology', 'Science', 'TodayILearned', 'Philosophy', 'Videos']
+              # 'Pics', 'MostBeautiful', 'EarthPorn']
 
 subreddit = reddit.subreddit('EDM')
 for SR in subreddits:
