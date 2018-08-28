@@ -29,7 +29,7 @@ while stillSearching:
 searchSite = "musescore.com"
 sheetsIndex = 0
 
-driver = webdriver.Chrome()
+driver = webdriver.Chrome("chromedriver.exe")
 
 while sheetsIndex < len(desiredSheets):
     driver.get(("https://www.google.ca/search?&q=site%3A{}+{}").format(searchSite, desiredSheets[sheetsIndex]))

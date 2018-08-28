@@ -1,5 +1,5 @@
 # Renew checkouts from the Toronto Public Library that are due today, tomorrow, or overdue
-# If an item could not be renewed, notify the user via email 
+# If an item could not be renewed, notify the user via email
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -60,7 +60,7 @@ userIndex = 0
 
 # Renew checkouts that are due today, tomorrow or overdue
 while userIndex < numUsers:
-    driver = webdriver.Chrome()
+    driver = webdriver.Chrome("chromedriver.exe")
     driver.get("https://account.torontopubliclibrary.ca/checkouts")
 
     # Login to TPL
