@@ -35,12 +35,15 @@ subreddit = reddit.subreddit('EDM')
 for SR in subreddits:
     count = 1
     subreddit = reddit.subreddit(SR)
-    submissions.append(("<h2>{}</h2>").format(SR))
+    submissions.append(("<h2>{}</h2> \n").format(SR))
     for submission in subreddit.top(time_filter='day', limit=subredditLimit):
-        submissions.append(("<a href='{}'>").format(submission.url))
-        submissions.append(("<p>{}</p>").format(submission.title))
-        submissions.append("</a>")
-    submissions.append("<br>")
+        submissions.append("<div> \n")
+        submissions.append(("<a href='{}'> \n").format(submission.url))
+        submissions.append(("<p>{}</p> \n").format(submission.title))
+        submissions.append("</a> \n")
+        submissions.append("</div> \n")
+        submissions.append("<br class='mobile'> \n")
+    submissions.append("<br> \n")
 
 # Email results to self
 fromaddr = EMAIL_USERNAME
@@ -59,10 +62,16 @@ formatted_submissions = s.join(submissions)
 # HTML version of email
 html = """\
 <html>
-  <head></head>
-  <body>
-    {}
-  </body>
+    <head>
+        <style>
+            @media only screen and (min-width:800px) {{
+                .mobile {{display: none !important;}}
+            }}
+        </style>
+    </head>
+    <body>
+        {}
+    </body>
 </html>
 """.format(formatted_submissions)
 
