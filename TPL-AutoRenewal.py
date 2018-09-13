@@ -17,6 +17,9 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
+# Enable time delay
+import time
+
 numUsers = 0
 searching = True
 
@@ -120,8 +123,10 @@ while userIndex < numUsers:
         # Find renew button by first locating the item title element
         renewButtonXPath = "//table[@class='item-list']//a[contains(text(), item)]/../../..//tr[2]//td[8]//button[1]"
         try:
+            print(item)
             renewButton = driver.find_element_by_xpath(renewButtonXPath)
             renewButton.click()
+            time.sleep(3)
         except NoSuchElementException:
             print("No Renew Button for {}!".format(item))
 
