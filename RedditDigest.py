@@ -28,10 +28,9 @@ reddit = praw.Reddit(client_id=API_USERNAME,
 subredditLimit = 2
 
 # Selected subreddits
-subreddits = ['Toronto', 'News', 'WorldNews', 'Technology', 'Science', 'TodayILearned', 'Philosophy', 'Videos']
+subreddits = ['MachineLearning', 'WorldNews', 'Technology', 'Science', 'TodayILearned']
               # 'Pics', 'MostBeautiful', 'EarthPorn']
 
-subreddit = reddit.subreddit('EDM')
 for SR in subreddits:
     count = 1
     subreddit = reddit.subreddit(SR)
