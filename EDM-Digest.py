@@ -27,11 +27,19 @@ reddit = praw.Reddit(client_id=API_USERNAME,
 
 subreddit = reddit.subreddit('EDM')
 
+num_submissions = 1
+
 for submission in subreddit.search('flair:New', sort='top', time_filter='week'):
     # Only print submissions that are for songs
     print(submission.title)
-    submissions.append(submission.title)
-    if len(submissions) >= 10:
+    submissions.append("<div> \n")
+    submissions.append(("<a href='{}'> \n").format(submission.url))
+    submissions.append(("<p>{}</p> \n").format(submission.title))
+    submissions.append("</a> \n")
+    submissions.append("</div> \n")
+    submissions.append("<br class='mobile'> \n")
+    num_submissions += 1
+    if num_submissions >= 10:
         break
 
 s = '\n'
@@ -67,15 +75,39 @@ while userIndex < len(EMAIL_MAILING_LIST):
     # Email results to self
     fromaddr = EMAIL_USERNAME
     toaddr = EMAIL_MAILING_LIST[userIndex]
+
+    # Create message container
     msg = MIMEMultipart()
     msg['From'] = fromaddr
     msg['To'] = toaddr
     msg['Subject'] = "EDM Digest"
 
-    # Allow Unicode characters to be emailed
-    text = MIMEText(formatted_submissions.encode('utf-8'), 'plain', 'UTF-8')
+    # Plain text version of email
+    s = ''
+    formatted_submissions = s.join(submissions)
 
-    msg.attach(text)
+    # HTML version of email
+    html = """\
+    <html>
+        <head>
+            <style>
+                @media only screen and (min-width:800px) {{
+                    .mobile {{display: none !important;}}
+                }}
+            </style>
+        </head>
+        <body>
+            {}
+        </body>
+    </html>
+    """.format(formatted_submissions)
+
+    # Allow Unicode characters to be emailed
+    plainText = MIMEText(formatted_submissions.encode('utf-8'), 'plain', 'UTF-8')
+    html = MIMEText(html, 'html')
+
+    # msg.attach(plainText)
+    msg.attach(html)
 
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
